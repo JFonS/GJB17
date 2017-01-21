@@ -10,16 +10,27 @@ class GameState extends Phaser.State {
         this.fishes = [];
         this.targetPosition = new Phaser.Point(rnd.realInRange(0,500), rnd.realInRange(0,500));
         this.nextChange = this.game.time.now + rnd.realInRange(1,6);
-
+				this.game.add.sprite(0, 0, 'bg');
         for (let i = 0; i < 100; ++i) {
 		    let fish = new Fish(this.game, rnd.integerInRange(0, 500), rnd.integerInRange(0, 500));
 		    this.fishes.push(fish);
 		    this.game.stage.addChild(fish);
+				this.game.add.sprite(0, 0, 'bg_o5');
+				this.game.add.sprite(0, 0, 'bg_o4');
+				this.game.add.sprite(0, 0, 'bg_o3');
+				this.game.add.sprite(0, 0, 'bg_o2');
+				this.game.add.sprite(0, 0, 'bg_o1');
         }
 	}
 
     preload() {
         this.game.stage.disableVisibilityChange = true;
+				this.load.image('bg', 'assets/sprites/bg/texturedBG.png');
+				this.load.image('bg_o1', 'assets/sprites/bg/lilly_overlay_1.png');
+				this.load.image('bg_o2', 'assets/sprites/bg/lilly_overlay_2.png');
+				this.load.image('bg_o3', 'assets/sprites/bg/lilly_overlay_3.png');
+				this.load.image('bg_o4', 'assets/sprites/bg/lilly_overlay_4.png');
+				this.load.image('bg_o5', 'assets/sprites/bg/lilly_overlay_5.png');
         this.load.spritesheet('fish', 'assets/sprites/00.png', 522,561);
     }
 
