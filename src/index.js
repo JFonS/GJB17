@@ -9,4 +9,4 @@ class Game extends Phaser.Game {
 	}
 }
 
-new Game();
+let banana = new Game();
