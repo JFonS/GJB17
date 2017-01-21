@@ -4,7 +4,12 @@ class Fish extends Phaser.Sprite {
 
     constructor(game, x, y) {
 
-        super(game, x, y, 'fish');
+        let color_fish = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+        let pattern_fish = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
+
+
+
+        super(game, x, y, ('fish').concat(color_fish.toString()).concat(pattern_fish.toString()));
 
         this.scale.setTo(0.1,0.1);
         this.anchor.set(0.5);
@@ -21,7 +26,12 @@ class Fish extends Phaser.Sprite {
         this.SEPARATION_FACTOR = 0.4;
         this.TARGET_FACTOR = 0.3;
 
+        this.ANIM_FPS = 0.5;
+
         this._velocity = new Phaser.Point(0, 0);
+
+        this.animations.add('swim');
+        this.animations.play('swim', 20, true);
     }
 
     update() {
@@ -41,6 +51,7 @@ class Fish extends Phaser.Sprite {
 
         this.position.add(vel.x, vel.y);
         this.angle = this._velocity.angle(new Phaser.Point(0,0), true) - 90;
+        this.animations._anims.swim.speed = this.ANIM_FPS * this._velocity.getMagnitude();
     }
 
     _flock(swarm, targetPos) {

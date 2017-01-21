@@ -39,7 +39,15 @@ class GameState extends Phaser.State {
 				this.load.image('bg_o3', 'assets/sprites/bg/lilly_overlay_3.png');
 				this.load.image('bg_o4', 'assets/sprites/bg/lilly_overlay_4.png');
 				this.load.image('bg_o5', 'assets/sprites/bg/lilly_overlay_5.png');
-        this.load.spritesheet('fish', 'assets/sprites/00.png', 522,561);
+        this.load.spritesheet('fish00', 'assets/sprites/00.png', 522,561);
+				this.load.spritesheet('fish01', 'assets/sprites/01.png', 522,561);
+				this.load.spritesheet('fish02', 'assets/sprites/02.png', 522,561);
+				this.load.spritesheet('fish10', 'assets/sprites/10.png', 522,561);
+				this.load.spritesheet('fish11', 'assets/sprites/11.png', 522,561);
+				this.load.spritesheet('fish12', 'assets/sprites/12.png', 522,561);
+				this.load.spritesheet('fish20', 'assets/sprites/20.png', 522,561);
+				this.load.spritesheet('fish21', 'assets/sprites/21.png', 522,561);
+				this.load.spritesheet('fish22', 'assets/sprites/22.png', 522,561);
     }
 
     update() {
