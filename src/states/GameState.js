@@ -27,6 +27,37 @@ class GameState extends Phaser.State {
 
         this.game.world.bringToTop(this.fishGroup);
         this.game.world.bringToTop(this.lillypadGroup);
+
+				let fragmentAigua = [
+        "precision mediump float;",
+
+				"uniform float     time;",
+				"uniform vec2      resolution;",
+				"uniform vec2      mouse;",
+
+
+        "void main(void) {",
+					"gl_FragColor = vec4(1,0,0,1);",
+					//"vec2 uv = fragCoord.xy / iResolution.xy;",
+					//"vec2 warpUV = 2. * uv;",
+
+					//"float d = length( warpUV );",
+					//"vec2 st = warpUV*0.1 + 0.2*vec2(cos(0.071*iGlobalTime*2.+d), sin(0.073*iGlobalTime*2.-d));",
+
+					//"vec3 warpedCol = texture2D( iChannel0, st ).xyz * 2.0;",
+					//"float w = max( warpedCol.r, 0.85);",
+
+					//"vec2 offset = 0.01 * cos( warpedCol.rg * 3.14159 );",
+					//"vec3 col = texture2D( iChannel1, uv + offset ).rgb * vec3(0.8, 0.8, 1.5) ;",
+					//"col *= w*1.2;",
+
+					//"fragColor = vec4( mix(col, texture2D( iChannel1, uv + offset ).rgb, 0.5),  1.0);",
+
+        "}"
+    	];
+		  let filter = new Phaser.Filter(this.game, null, fragmentAigua);
+			filter.addToWorld(0, 0, 1200, 700);
+
 	}
 
     preload() {
