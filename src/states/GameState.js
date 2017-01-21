@@ -61,6 +61,10 @@ class GameState extends Phaser.State {
         //let filter = new Phaser.Filter(this.game, {}, fragmentAigua);
         // filter.addToWorld(0, 0, 1200, 700);
 
+
+				let music = this.add.audio('zen');
+				music.play();
+
     }
 
     preload() {
@@ -80,6 +84,8 @@ class GameState extends Phaser.State {
         this.load.spritesheet('fish20', 'assets/sprites/20.png', 522, 561);
         this.load.spritesheet('fish21', 'assets/sprites/21.png', 522, 561);
         this.load.spritesheet('fish22', 'assets/sprites/22.png', 522, 561);
+
+				this.load.audio('zen', 'assets/Music/Audio.mp3');
     }
 
     update() {
