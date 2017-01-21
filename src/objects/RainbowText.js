@@ -2,7 +2,7 @@ class RainbowText extends Phaser.Text {
 
 	constructor(game, x, y, text) {
 
-		super(game, x, y, text, { font: "45px Arial", fill: "#ff0044", align: "center" });
+		super(game, x, y, text, { font: "45px Arial", fill: "#5cff00", align: "center" });
 
 		this._speed = 125; //ms
 		this._colorIndex = 0;
@@ -29,7 +29,6 @@ class RainbowText extends Phaser.Text {
 
 			this.addColor(this._colors[this._colorIndex], i);
 			this._colorIndex++;
-
 		}
 
 	}
