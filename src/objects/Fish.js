@@ -7,8 +7,6 @@ class Fish extends Phaser.Sprite {
         let color_fish = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
         let pattern_fish = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
 
-
-
         super(game, x, y, ('fish').concat(color_fish.toString()).concat(pattern_fish.toString()));
 
         this.scale.setTo(0.1,0.1);
@@ -18,23 +16,27 @@ class Fish extends Phaser.Sprite {
         this.NEIGHBOUR_RADIUS = 300;
         this.SEPARATION_RADIUS = 40;
 
-        this.MAX_SPEED = 30;
+        this.MAX_SPEED = 50;
         this.MAX_FORCE = 0.06;
 
-        this.COHESION_FACTOR = 0.1;
-        this.ALIGNMENT_FACTOR = 0.2;
+        this.COHESION_FACTOR = 0.4;
+        this.ALIGNMENT_FACTOR = 0.4;
         this.SEPARATION_FACTOR = 0.4;
-        this.TARGET_FACTOR = 0.3;
+        this.TARGET_FACTOR = 0.6;
 
-        this.ANIM_FPS = 0.5;
+        this.ANIM_FPS = 0.25;
+        this.MAX_ANIM_FPS = 15;
 
-        this._velocity = new Phaser.Point(0, 0);
+        this._velocity = new Phaser.Point(this.game.rnd.realInRange(-20,20), this.game.rnd.realInRange(-20,20), 0);
 
         this.animations.add('swim');
         this.animations.play('swim', 20, true);
     }
 
     update() {
+        let oldPos = new Phaser.Point(this.position.x,this.position.y);
+        let oldVel = new Phaser.Point(this._velocity.x,this._velocity.y);
+
         let deltaTime = this.game.time.elapsed / 1000;
 
         let state = this.game.state.getCurrentState();
@@ -43,29 +45,41 @@ class Fish extends Phaser.Sprite {
         //if (acceleration.getMagnitude() > this.MAX_FORCE) acceleration.setMagnitude(this.MAX_FORCE);
 
         this._velocity.add(acceleration.x, acceleration.y);
-        //if (this._velocity.getMagnitude() > this.MAX_SPEED) this._velocity.setMagnitude(this.MAX_SPEED);
+        if (this._velocity.getMagnitude() > this.MAX_SPEED) this._velocity.setMagnitude(this.MAX_SPEED);
+
+        if (isNaN(this._velocity.x) || isNaN(this._velocity.y)) this._velocity = oldVel;
 
         let vel = new Phaser.Point(this._velocity.x, this._velocity.y);
         vel.multiply(deltaTime, deltaTime);
 
 
         this.position.add(vel.x, vel.y);
+        if (isNaN(this.position.x) || isNaN(this.position.y)) this.position = oldPos;
+
         this.angle = this._velocity.angle(new Phaser.Point(0,0), true) - 90;
-        this.animations._anims.swim.speed = this.ANIM_FPS * this._velocity.getMagnitude();
+        this.animations._anims.swim.speed = Math.min(this.MAX_ANIM_FPS, this.ANIM_FPS * this._velocity.getMagnitude());
+
     }
 
     _flock(swarm, targetPos) {
         let cohesion = this._cohere(swarm).multiply(this.COHESION_FACTOR,this.COHESION_FACTOR);
         let alignment = this._align(swarm).multiply(this.ALIGNMENT_FACTOR,this.ALIGNMENT_FACTOR);
         let separation = this._separate(swarm).multiply(this.SEPARATION_FACTOR,this.SEPARATION_FACTOR);
-        let target = this._steerTo(targetPos);//.multiply(this.TARGET_FACTOR,this.TARGET_FACTOR);
+        let target = this._steerTo(targetPos).multiply(this.TARGET_FACTOR,this.TARGET_FACTOR);
 
         let acceleration = new Phaser.Point(0,0);
-        acceleration.add(alignment.x,alignment.y);
-        acceleration.add(separation.x,separation.y);
-        acceleration.add(cohesion.x,cohesion.y);
-        acceleration.add(target.x,target.y);
+        if (!isNaN(alignment.x)) acceleration.add(alignment.x,alignment.y);
+        if (!isNaN(separation.x)) acceleration.add(separation.x,separation.y);
+        if (!isNaN(cohesion.x)) acceleration.add(cohesion.x,cohesion.y);
+        if (!isNaN(target.x)) acceleration.add(target.x,target.y);
 
+        if (this.debugger && isNaN(acceleration.x)) {
+            console.log(targetPos, swarm);
+            console.log("alignment", alignment);
+            console.log("separation", separation);
+            console.log("cohesion", cohesion);
+            console.log("target", target);
+        }
         return acceleration;
     }
 
@@ -85,12 +99,12 @@ class Fish extends Phaser.Sprite {
     }
 
     _steerTo(target) {
-        let desired = new Phaser.Point(target.x,target.y);
-        desired.subtract(this.position.x, this.position.y);
+        let desired = new Phaser.Point(target.x - this.position.x, target.y - this.position.y);
 
-        let oldx = desired.x, oldy = desired.y;
         let d = desired.getMagnitude();
-        if (d == 0) return new Vec2(0, 0);
+
+        //if (this.debugger) console.log(target,this.position, desired, d);
+        if (d == 0) return new Phaser.Point(0.01, 0.01);
 
         desired.normalize();
 
@@ -106,10 +120,6 @@ class Fish extends Phaser.Sprite {
 
         //Clamp magnitude
         if (steer.getMagnitude() > this.MAX_FORCE) steer.setMagnitude(this.MAX_FORCE);
-
-        if (isNaN(steer.x)) {
-            return new Phaser.Point(0,0);
-        }
         return steer;
     }
 
@@ -143,11 +153,30 @@ class Fish extends Phaser.Sprite {
             if (distance < this.SEPARATION_RADIUS) {
                 let desired = new Phaser.Point(this.position.x,this.position.y);
                 desired.subtract(fish.position.x, fish.position.y);
-                if (distance > 0) desired.divide(distance^1.001,distance^1.001);
-                mean.add(desired.x,desired.y);
+                if (distance > 0)
+                {
+                    desired.divide(distance,distance);
+                    mean.add(desired.x,desired.y);
+                }
             }
         }
 
+
+        /*if (this.position.x < this.SEPARATION_RADIUS) {
+            mean.add(1,0);
+        }
+
+        if (this.position.x > this.game.width - this.SEPARATION_RADIUS) {
+            mean.add( -1, 0);
+        }
+
+        if (this.position.y < this.SEPARATION_RADIUS) {
+            mean.add(0,1);
+        }
+
+        if (this.position.y > this.game.height - this.SEPARATION_RADIUS) {
+            mean.add(0, -1);
+        }*/
 
         if (this.position.x < this.SEPARATION_RADIUS) {
             mean.add((this.SEPARATION_RADIUS-this.position.x)/this.SEPARATION_RADIUS,0);

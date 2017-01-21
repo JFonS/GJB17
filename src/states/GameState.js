@@ -11,23 +11,21 @@ class GameState extends Phaser.State {
 		this.lillypadGroup = this.game.add.group();
 
         this.fishes = [];
-        this.targetPosition = new Phaser.Point(rnd.realInRange(100,400), rnd.realInRange(0,500));
+        this.targetPosition = new Phaser.Point(rnd.realInRange(100,this.game.width-100), rnd.realInRange(100,this.game.height-100));
         this.nextChange = this.game.time.now + rnd.realInRange(1,6);
 		this.game.add.sprite(0, 0, 'bg');
 
 		for (let i = 0; i < 50; ++i) {
-		    let fish = new Fish(this.game, rnd.integerInRange(0, 500), rnd.integerInRange(0, 500));
+		    let fish = new Fish(this.game, rnd.realInRange(100,this.game.width-100), rnd.realInRange(100,this.game.height-100));
 		    this.fishes.push(fish);
-		    this.game.stage.addChild(fish);
-		    //this.fishGroup.add(fish);
+		    this.fishGroup.add(fish);
         }
 
-        this.lillypadGroup.add(this.game.add.sprite(0, 0, 'bg_o5'));
-        this.lillypadGroup.add(this.game.add.sprite(0, 0, 'bg_o4'));
-        this.lillypadGroup.add(this.game.add.sprite(0, 0, 'bg_o3'));
-        this.lillypadGroup.add(this.game.add.sprite(0, 0, 'bg_o2'));
-        this.lillypadGroup.add(this.game.add.sprite(0, 0, 'bg_o1'));
+        this.fishes[0].debugger = true;
 
+        for (let i = 1; i < 6; ++i) this.lillypadGroup.create(0, 0, 'bg_o' + i);
+
+        this.game.world.bringToTop(this.fishGroup);
         this.game.world.bringToTop(this.lillypadGroup);
 	}
 
@@ -76,7 +74,8 @@ class GameState extends Phaser.State {
 
             this.nextChange = this.game.time.now + rnd.realInRange(200,500);
         }
-
+        //console.log(this.targetPosition);
+	    //console.log(this.nextChange);
     }
 }
 
