@@ -19,16 +19,18 @@ class Fish extends Phaser.Sprite {
         this.DANGER_RADIUS = 100;
 
         this.MAX_SPEED = 50;
-        this.MAX_FORCE = 0.06;
+        this.MAX_FORCE = 0.03;
+        this.MAX_ACCEL = 1.0;
 
-        this.COHESION_FACTOR = 0.0;
-        this.ALIGNMENT_FACTOR = 0.0;
-        this.SEPARATION_FACTOR = 0.5;
-        this.TARGET_FACTOR = 4.7;
-        this.DANGER_FACTOR = 0.7;
+        this.COHESION_FACTOR = 1.5;
+        this.ALIGNMENT_FACTOR = 1.5;
+        this.SEPARATION_FACTOR = 3;
+        this.TARGET_FACTOR = 3;
+        this.DANGER_FACTOR = 2;
 
         this.ANIM_FPS = 0.25;
         this.MAX_ANIM_FPS = 15;
+        this.DRAG = 0.01;
 
         /*//////////////////////////////
         this.NEIGHBOUR_RADIUS = 300;
@@ -66,7 +68,7 @@ class Fish extends Phaser.Sprite {
         let state = this.game.state.getCurrentState();
         let acceleration = this._flock(state.fishes, state.targetPosition);
 
-        //if (acceleration.getMagnitude() > this.MAX_FORCE) acceleration.setMagnitude(this.MAX_FORCE);
+        if (acceleration.getMagnitude() > this.MAX_ACCEL) acceleration.setMagnitude(this.MAX_ACCEL);
 
         this._velocity.add(acceleration.x, acceleration.y);
         if (this._velocity.getMagnitude() > this.MAX_SPEED) this._velocity.setMagnitude(this.MAX_SPEED);
@@ -81,6 +83,9 @@ class Fish extends Phaser.Sprite {
 
         this.angle = this._velocity.angle(new Phaser.Point(0, 0), true) - 90;
         this.animations._anims.swim.speed = Math.min(this.MAX_ANIM_FPS, this.ANIM_FPS * this._velocity.getMagnitude());
+
+        let drag = 1.0 - this.DRAG * deltaTime;
+        this._velocity.multiply(drag,drag);
 
     }
 
@@ -212,9 +217,14 @@ class Fish extends Phaser.Sprite {
             let distance = this.position.distance(target);
             if (distance < this.TARGET_RADIUS) {
                 let steer = this._steerTo(target);
-                result.add(steer);
+                if (distance > 0) {
+                    steer.normalize().multiply(10,10);
+                    steer.divide(distance, distance);
+                    result.add(steer.x, steer.y);
+                }
             }
         }
+
         return result;
     }
 

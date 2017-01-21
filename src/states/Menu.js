@@ -10,19 +10,20 @@ class Menu extends GameState {
         super.create();
         let rnd = this.game.rnd;
         this.targetPosition = [new Phaser.Point(rnd.realInRange(100, this.game.width - 100), rnd.realInRange(100, this.game.height - 100))];
-        this.dangers = [new Phaser.Point(this.game.width/2,this.game.height/2)];
+        this.dangers = [];//new Phaser.Point(this.game.width/2,this.game.height/2)];
         this.nextChange = this.game.time.now + rnd.realInRange(1, 6);
 
         for (let fish of this.fishes) {
             fish.targets = this.targetPosition;
             fish.dangers = this.dangers;
+            fish.TARGET_FACTOR = 1.0;
         }
 
-        let f = this.game.add.sprite(this.game.width/2,this.game.height/2,"fish00");
+        /*let f = this.game.add.sprite(this.game.width/2,this.game.height/2,"fish00");
         f.scale.setTo(0.02);
 
         this.targetFish = this.game.add.sprite(this.targetPosition[0].x, this.targetPosition[0].y,"fish10");
-        this.targetFish.scale.setTo(0.02);
+        this.targetFish.scale.setTo(0.02);*/
     }
 
     update() {
@@ -50,11 +51,11 @@ class Menu extends GameState {
         meanPos.divide(this.fishes.length, this.fishes.length);
 
         this.targetPosition[0] = new Phaser.Point(meanPos.x, meanPos.y);
-        let dist = rnd.realInRange(100, 300);
+        let dist = rnd.realInRange(300, 600);
         meanDir.multiply(dist, dist);
         meanDir.rotate(0, 0, rnd.realInRange(-45, 45), true);
         this.targetPosition[0].add(meanDir.x, meanDir.y);
-        this.targetFish.position = this.targetPosition[0];
+        //this.targetFish.position = this.targetPosition[0];
     }
 }
 
