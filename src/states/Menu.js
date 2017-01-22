@@ -18,6 +18,11 @@ class Menu extends GameState {
             fish.dangers = this.dangers;
             fish.TARGET_FACTOR = 1.0;
         }
+        this.play_button = this.add.button(this.world.centerX - 145, 145, 'play', this.actionOnClick, this, 2, 1, 0);
+        this.relax_button = this.add.button(this.world.centerX - 145, 145+124+5, 'relax', this.actionOnClick, this, 2, 1, 0);
+        this.credits_button = this.add.button(this.world.centerX - 145, 145+124+124+5, 'credits', this.actionOnClick, this, 2, 1, 0);
+
+        this.game.add.sprite(0, 0, 'menu_overlay');
 
         /*let f = this.game.add.sprite(this.game.width/2,this.game.height/2,"fish00");
         f.scale.setTo(0.02);
@@ -56,6 +61,18 @@ class Menu extends GameState {
         meanDir.rotate(0, 0, rnd.realInRange(-45, 45), true);
         this.targetPosition[0].add(meanDir.x, meanDir.y);
         //this.targetFish.position = this.targetPosition[0];
+    }
+
+    preload() {
+      super.preload();
+      this.load.image('menu_overlay', 'assets/Menu/menu_overlay.png');
+      this.load.spritesheet('play', 'assets/Menu/play_sprite.png', 291, 124);
+      this.load.spritesheet('relax', 'assets/Menu/relax_sprite.png', 291, 124);
+      this.load.spritesheet('credits', 'assets/Menu/credits_sprite.png', 291, 124);
+    }
+
+    actionOnClick () {
+
     }
 }
 

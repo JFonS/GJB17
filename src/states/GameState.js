@@ -48,6 +48,9 @@ class GameState extends Phaser.State {
         this.load.image('bg_o3', 'assets/sprites/bg/lilly_overlay_3.png');
         this.load.image('bg_o4', 'assets/sprites/bg/lilly_overlay_4.png');
         this.load.image('bg_o5', 'assets/sprites/bg/lilly_overlay_5.png');
+
+
+
         this.load.spritesheet('fish00', 'assets/sprites/00.png', 522, 561);
         this.load.spritesheet('fish01', 'assets/sprites/01.png', 522, 561);
         this.load.spritesheet('fish02', 'assets/sprites/02.png', 522, 561);
@@ -61,6 +64,8 @@ class GameState extends Phaser.State {
         this.load.audio('zen', 'assets/Music/Audio.mp3');
         this.load.image('caustics', 'assets/sprites/caustics.jpg');
         this.load.shader('caustics', 'assets/shaders/caustics.frag');
+
+
     }
 
     preRender() {
