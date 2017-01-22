@@ -1,5 +1,6 @@
 import Fish from 'objects/Fish';
 import Caustics from 'objects/Caustics';
+import LillyPad from 'objects/LillyPad';
 
 class GameState extends Phaser.State {
 
@@ -26,9 +27,20 @@ class GameState extends Phaser.State {
 
         this.fishes[0].debugger = true;
 
-        for (let i = 1; i < 6; ++i) this.lillypadGroup.create(0, 0, 'bg_o' + i);
+        this.pads = [];
 
-        //this.game.world.bringToTop(this.fishGroup);
+        this.padData = [{},
+            {x: 1040, y: 130, r: 60},
+            {x: 1107, y:  64, r: 45},
+            {x:  183, y: 641, r: 40},
+            {x:   70, y: 600, r: 60},
+            {x:  170, y: 570, r: 40}];
+
+        for (let i = 1; i < 6; ++i)  {
+            let pad = new LillyPad(this.game, 'bg_o' + i, this.padData[i]);
+            this.pads.push(pad);
+            this.lillypadGroup.add(pad);
+        }
 
         this.causticsRT = this.add.renderTexture(this.game.width, this.game.height);
         this.caustics = new Caustics(this.game, this.causticsRT);
@@ -72,7 +84,12 @@ class GameState extends Phaser.State {
     }
 
     update() {
-       // this.fishGroup.update();
+        for (let b1 of this.pads) {
+            for (let b2 of this.pads) {
+                if (b1 === b2) continue;
+                this.game.physics.arcade.collide(b1, b2);
+            }
+        }
     }
 }
 

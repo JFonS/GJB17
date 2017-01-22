@@ -19,14 +19,32 @@ class InGame extends GameState {
             fish.dangers = this.dangers;
         }
 
-        //this.overlay = this.game.add.sprite(0,0,this._overlayName);
-
-        //this.game.add.tween(this.overlay).to( { alpha: 1 }, 2000, Phaser.Easing.Quadratic);
-
+        this.lastTimer = null;
+        this.rippleTime = Phaser.Timer.SECOND * 4;
     }
 
     preload() {
         super.preload();
+        this.load.spritesheet('bait', 'assets/sprites/bait',70,80);
+        this.load.spritesheet('stones', 'assets/sprites/bait',60,55);
+    }
+
+    preRender() {
+        let rPos = new Phaser.Point(10000,10000);
+        if (this.targets.length > 0) {
+            rPos = this.targets[this.targets.length - 1];
+        } else if (this.dangers.length > 0) {
+            rPos = this.dangers[this.dangers.length - 1];
+        }
+        let data = {
+            ripplePos: rPos,
+            fadeTime: this.lastTimer ? 1.0 - (this.game.time.now - this.lastTimer)/this.rippleTime : 0.0
+        };
+
+
+        this.caustics.setUniforms(data);
+
+        super.preRender();
     }
 
     update() {
@@ -38,13 +56,15 @@ class InGame extends GameState {
         let danger = new Phaser.Point(this.game.input.mousePointer.x,this.game.input.mousePointer.y);
 
         this.dangers.push(danger);
-        this.game.time.events.add(Phaser.Timer.SECOND * 4, function() {
+        this.game.time.events.add(this.rippleTime, function() {
             console.log(danger);
             let i = this.dangers.indexOf(danger);
             if (i > -1) {
                 this.dangers.splice(i, 1);
             }
         }, this);
+
+        this.lastTimer = this.game.time.now;
     }
 
     _onLeftClick() {
@@ -52,7 +72,7 @@ class InGame extends GameState {
         let target = new Phaser.Point(this.game.input.mousePointer.x,this.game.input.mousePointer.y);
 
         this.targets.push(target);
-        this.game.time.events.add(Phaser.Timer.SECOND * 4, function() {
+        this.game.time.events.add(this.rippleTime, function() {
             console.log(target);
             let i = this.targets.indexOf(target);
             if (i > -1) {
@@ -60,6 +80,7 @@ class InGame extends GameState {
             }
 
         }, this);
+        this.lastTimer = this.game.time.now;
     }
 }
 

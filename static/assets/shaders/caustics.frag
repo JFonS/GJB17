@@ -12,6 +12,8 @@ uniform sampler2D uSampler;
 uniform float     time;
 uniform vec2      resolution;
 uniform vec2      mouse;
+uniform vec2      ripple;
+uniform float     fadeTime;
 
 float col(vec2 p) {
     float tim = time * .25+23.0;
@@ -49,24 +51,45 @@ float col2(vec2 p) {
     return clamp(pow(abs(c), 8.0),0.,1.);
 }
 
+float rippleHeight(vec2 r, vec2 p) {
+    float d = distance(r,p);
+    float ra = 0.5 * (1.-fadeTime);
+    if (d > ra) return 0.;
+    float s = sin(d*200. -time*4.) * .5 + .5;
+    return mix(s,0.0, distance(r,p)/ra) * fadeTime;
+}
+
 
 void main()
 {
+    vec2 ruv = ripple/resolution.y;
+    vec2 suv = gl_FragCoord.xy/resolution.y;
+
+    ruv.y = 1. - ruv.y;
+
     vec2 ti = (1./resolution);
 	vec2 uv = vTextureCoord;
-	//uv.y = 1. - uv.y;
 
 	vec2 p = mod((uv + vec2(0.15))*TAU*vec2(2.1,1.7), TAU)-250.0;
 
-    vec3 height = vec3(col(p));
+
+    vec3 height = vec3(col(p)) + rippleHeight(ruv, suv);
     vec2 m = vec2(0);
     vec2 M = vec2(0);
 
-    m.x = col2(p - vec2(ti.x,0));
-    M.x = col2(p + vec2(ti.x,0));
+    vec2 pp = vec2(ti.x,0);
+    m.x = col2(p + pp);
 
-    m.y = col2(p - vec2(0,ti.y));
-    M.y = col2(p + vec2(0,ti.y));
+    pp = vec2(ti.x,0);
+    M.x = col2(p + pp);
+
+
+    pp = vec2(0,ti.y);
+    m.y = col2(p + pp);
+
+
+    pp = vec2(0,ti.y);
+    M.y = col2(p + pp);
 
     vec2 grad = (m - M);
 

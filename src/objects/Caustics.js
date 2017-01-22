@@ -3,22 +3,30 @@
  */
 
 class Caustics extends Phaser.Sprite {
-    constructor(game, renderTexture, targets, dangers) {
+    constructor(game, renderTexture) {
         super(game, 0, 0, renderTexture);
-        this.blendMode = PIXI.blendModes.ADD;
+        //this.blendMode = PIXI.blendModes.ADD;
         this.width = this.game.width;
         this.height = this.game.height;
 
-        this.targets = targets;
-        this.dangers = dangers;
+        let uniforms = {};
+        uniforms.ripple = { type: '2f', value: 1.0 };
+        uniforms.fadeTime = {type: '1f', value: 0.5};
 
-        let filter = new Phaser.Filter(this.game, null, this.game.cache.getShader('caustics'));
+        let filter = new Phaser.Filter(this.game, uniforms, this.game.cache.getShader('caustics'));
         filter.setResolution(this.game.width, this.game.height);
         this.filters = [filter];
     }
 
     update() {
-        this.filters[0].update(this.game.input.mousePointer);
+        let f = this.filters[0];
+        f.update(this.game.input.mousePointer);
+    }
+
+    setUniforms(data) {
+        let f = this.filters[0];
+        f.uniforms.ripple.value = data.ripplePos;
+        f.uniforms.fadeTime.value = data.fadeTime;
     }
 }
 
