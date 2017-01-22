@@ -1,4 +1,5 @@
 import Fish from 'objects/Fish';
+import Caustics from 'objects/Caustics';
 
 class GameState extends Phaser.State {
 
@@ -26,44 +27,16 @@ class GameState extends Phaser.State {
         for (let i = 1; i < 6; ++i) this.lillypadGroup.create(0, 0, 'bg_o' + i);
 
         this.game.world.bringToTop(this.fishGroup);
+
+
+        this.caustics = new Caustics(this.game);
+
+        this.game.world.addChild(this.caustics);
+
         this.game.world.bringToTop(this.lillypadGroup);
 
-
-        let fragmentAigua = [
-            "precision mediump float;",
-            "uniform float     time;",
-            "uniform vec2      resolution;",
-            "uniform vec2      mouse;",
-
-            "uniform sampler2D uSampler;",
-            "varying vec2 vTextureCoord;",
-
-            "void main(void) {",
-            //"vec4 texColor = texture2D(uSampler, vTextureCoord);",
-            "gl_FragColor = vec4(1); //texColor",
-            //"vec2 uv = fragCoord.xy / iResolution.xy;",
-            //"vec2 warpUV = 2. * uv;",
-
-            //"float d = length( warpUV );",
-            //"vec2 st = warpUV*0.1 + 0.2*vec2(cos(0.071*iGlobalTime*2.+d), sin(0.073*iGlobalTime*2.-d));",
-
-            //"vec3 warpedCol = texture2D( iChannel0, st ).xyz * 2.0;",
-            //"float w = max( warpedCol.r, 0.85);",
-
-            //"vec2 offset = 0.01 * cos( warpedCol.rg * 3.14159 );",
-            //"vec3 col = texture2D( iChannel1, uv + offset ).rgb * vec3(0.8, 0.8, 1.5) ;",
-            //"col *= w*1.2;",
-
-            //"fragColor = vec4( mix(col, texture2D( iChannel1, uv + offset ).rgb, 0.5),  1.0);",
-
-            "}"
-        ];
-        //let filter = new Phaser.Filter(this.game, {}, fragmentAigua);
-        // filter.addToWorld(0, 0, 1200, 700);
-
-
-				let music = this.add.audio('zen');
-				music.play();
+        let music = this.add.audio('zen');
+        music.play();
 
     }
 
@@ -85,7 +58,13 @@ class GameState extends Phaser.State {
         this.load.spritesheet('fish21', 'assets/sprites/21.png', 522, 561);
         this.load.spritesheet('fish22', 'assets/sprites/22.png', 522, 561);
 
-				this.load.audio('zen', 'assets/Music/Audio.mp3');
+        this.load.audio('zen', 'assets/Music/Audio.mp3');
+        this.load.image('caustics', 'assets/sprites/caustics.jpg');
+        this.load.shader('caustics', 'assets/shaders/caustics.frag');
+    }
+
+    preRender() {
+
     }
 
     update() {

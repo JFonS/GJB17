@@ -2,7 +2,7 @@
 
 class Fish extends Phaser.Sprite {
 
-    constructor(game, x, y, constants) {
+    constructor(game, x, y) {
 
         let color_fish = Math.floor(Math.random() * (2 - 0 + 1)) + 0;
         let pattern_fish = Math.floor(Math.random() * (2 - 0 + 1)) + 0;

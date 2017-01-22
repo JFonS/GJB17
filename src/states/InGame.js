@@ -19,18 +19,18 @@ class InGame extends GameState {
             fish.dangers = this.dangers;
         }
 
+        //this.overlay = this.game.add.sprite(0,0,this._overlayName);
+
+        //this.game.add.tween(this.overlay).to( { alpha: 1 }, 2000, Phaser.Easing.Quadratic);
 
     }
 
     preload() {
         super.preload();
-
     }
 
     update() {
         super.update();
-        console.log(this.targets, this.dangers);
-
     }
 
     _onRightClick() {
@@ -45,7 +45,6 @@ class InGame extends GameState {
                 this.dangers.splice(i, 1);
             }
         }, this);
-
     }
 
     _onLeftClick() {
