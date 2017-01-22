@@ -26,7 +26,10 @@ class Menu extends GameState {
         this.m_overlay = this.game.add.sprite(0, 0, 'menu_overlay');
 
         this.logo = this.game.add.sprite(0, 0, 'logo');
-        this.add.tween(this.logo).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 3000);
+        this.add.tween(this.logo).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 6000);
+
+        this.emptyp = this.game.add.sprite(0, 0, 'empty_pond');
+        this.add.tween(this.emptyp).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 3000);
 
         this.caustics.setUniforms({ripplePos: new Phaser.Point(10000,10000), fadeTime: 1.0});
 
@@ -73,6 +76,7 @@ class Menu extends GameState {
 
       super.preload();
       this.load.image('logo', 'assets/koi_pond.png');
+      this.load.image('empty_pond', 'assets/sprites/bg/texturedBG_complete.png');
       this.load.image('menu_overlay', 'assets/Menu/menu_overlay.png');
       this.load.spritesheet('play', 'assets/Menu/play_sprite.png', 291, 124);
       this.load.spritesheet('relax', 'assets/Menu/relax_sprite.png', 291, 124);
