@@ -10,7 +10,7 @@ class Menu extends GameState {
         super.create();
         let rnd = this.game.rnd;
         this.targetPosition = [new Phaser.Point(rnd.realInRange(100, this.game.width - 100), rnd.realInRange(100, this.game.height - 100))];
-        this.dangers = [];//new Phaser.Point(this.game.width/2,this.game.height/2)];
+        this.dangers = [];
         this.nextChange = this.game.time.now + rnd.realInRange(1, 6);
 
         for (let fish of this.fishes) {

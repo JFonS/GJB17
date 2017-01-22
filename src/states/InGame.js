@@ -34,7 +34,7 @@ class InGame extends GameState {
     }
 
     _onRightClick() {
-        console.log("right", this.game.input.mousePointer.x, this.game.input.mousePointer.y);
+
         let danger = new Phaser.Point(this.game.input.mousePointer.x,this.game.input.mousePointer.y);
 
         this.dangers.push(danger);
@@ -48,7 +48,7 @@ class InGame extends GameState {
     }
 
     _onLeftClick() {
-        console.log("left", this.game.input.mousePointer.x, this.game.input.mousePointer.y);
+
         let target = new Phaser.Point(this.game.input.mousePointer.x,this.game.input.mousePointer.y);
 
         this.targets.push(target);
