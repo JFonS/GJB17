@@ -28,6 +28,8 @@ class Menu extends GameState {
         this.logo = this.game.add.sprite(0, 0, 'logo');
         this.add.tween(this.logo).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 3000);
 
+        this.caustics.setUniforms({ripplePos: new Phaser.Point(10000,10000), fadeTime: 1.0});
+
         /*let f = this.game.add.sprite(this.game.width/2,this.game.height/2,"fish00");
         f.scale.setTo(0.02);
 
@@ -94,10 +96,7 @@ class Menu extends GameState {
       this.add.tween(this.relax_button).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
       this.add.tween(this.credits_button).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
       this.add.tween(this.m_overlay).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true).onComplete.add(function(){this.camera.fade('#000000');
-                                                                                                                        this.camera.onFadeComplete.add(function(){this.game.state.start('Level1');},this);}, this);
-
-
-
+      this.camera.onFadeComplete.add(function(){this.game.state.start('Level1');},this);}, this);
     }
     actionOnClickCredits () {
       this.add.tween(this.play_button).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true);
