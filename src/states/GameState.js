@@ -35,6 +35,9 @@ class GameState extends Phaser.State {
 
         this.game.world.bringToTop(this.lillypadGroup);
 
+				this.black = this.game.add.sprite(0, 0, 'black');
+        this.add.tween(this.black).to( { alpha: 0 }, 2000, Phaser.Easing.Linear.None, true, 500);
+
         let music = this.add.audio('zen');
         music.play();
 
@@ -64,6 +67,8 @@ class GameState extends Phaser.State {
         this.load.audio('zen', 'assets/Music/Audio.mp3');
         this.load.image('caustics', 'assets/sprites/caustics.jpg');
         this.load.shader('caustics', 'assets/shaders/caustics.frag');
+
+				this.load.image('black', 'assets/black.png');
 
 
     }
