@@ -38,7 +38,7 @@ class InGame extends GameState {
         }
         let data = {
             ripplePos: rPos,
-            fadeTime: this.lastTimer ? 1.0 - (this.game.time.now - this.lastTimer)/this.rippleTime : 0.0
+            fadeTime: this.targets.length + this.dangers.length > 0 ? 1.0 - (this.game.time.now - this.lastTimer)/this.rippleTime : 0.0
         };
 
 

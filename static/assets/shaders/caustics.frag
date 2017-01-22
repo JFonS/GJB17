@@ -59,7 +59,7 @@ float col2(vec2 p) {
 
 float rippleHeight(vec2 r, vec2 p) {
     float d = distance(r,p);
-    float ra = 0.5 * (1.-fadeTime);
+    float ra = max(0.,0.5 * (1.-fadeTime));
     if (d > ra) return 0.;
 
     float s = sin(d*200. -time*4.) * .5 + .5;
@@ -69,11 +69,21 @@ float rippleHeight(vec2 r, vec2 p) {
 float shadow() {
     vec2 p = gl_FragCoord.xy;
     p.y = resolution.y - p.y;
-    p -= vec2(20,15);
-    float d = distance(p,l0);
-    d = min(d,distance(p,l1));
+    float st = (sin(time) * .5 + .5);
+
+    vec2 pp = p - vec2(20,15) - vec2(sin(l0.y*l0.x)) * st;
+    float d = distance(pp,l0);
+
+    pp = p - vec2(20,15) - vec2(sin(l1.y*l1.x)) * st;
+    d = min(d,distance(pp,l1));
+
+    pp = p - vec2(20,15) - vec2(sin(l2.y*l2.x)) * st;
     d = min(d,distance(p,l2));
+
+    pp = p - vec2(20,15) - vec2(sin(l3.y*l3.x)) * st;
     d = min(d,distance(p,l3));
+
+    pp = p - vec2(20,15) - vec2(sin(l4.y*l4.x)) * st;
     d = min(d,distance(p,l4));
 
     return min(10./d,0.25);
