@@ -9,12 +9,12 @@ class GameState extends Phaser.State {
 
         let rnd = this.game.rnd;
 
-        this.fishGroup = this.game.add.group();
+        this.fishGroup = this.game.add.group(); //new Phaser.Group(this.game,null,'underwater');
         this.lillypadGroup = this.game.add.group();
 
         this.fishes = [];
 
-        this.game.add.sprite(0, 0, 'bg');
+        this.fishGroup.create(0, 0, 'bg');
 
         for (let i = 0; i < 50; ++i) {
             let fish = new Fish(this.game, rnd.realInRange(100, this.game.width - 100), rnd.realInRange(100, this.game.height - 100));
@@ -22,14 +22,16 @@ class GameState extends Phaser.State {
             this.fishGroup.add(fish);
         }
 
+        this.fishGroup.visible = false;
+
         this.fishes[0].debugger = true;
 
         for (let i = 1; i < 6; ++i) this.lillypadGroup.create(0, 0, 'bg_o' + i);
 
-        this.game.world.bringToTop(this.fishGroup);
+        //this.game.world.bringToTop(this.fishGroup);
 
-
-        this.caustics = new Caustics(this.game);
+        this.causticsRT = this.add.renderTexture(this.game.width, this.game.height);
+        this.caustics = new Caustics(this.game, this.causticsRT);
 
         this.game.world.addChild(this.caustics);
 
@@ -64,11 +66,13 @@ class GameState extends Phaser.State {
     }
 
     preRender() {
-
+        this.fishGroup.visible = true;
+        this.causticsRT.renderXY(this.fishGroup,0,0);
+        this.fishGroup.visible = false;
     }
 
     update() {
-
+       // this.fishGroup.update();
     }
 }
 
