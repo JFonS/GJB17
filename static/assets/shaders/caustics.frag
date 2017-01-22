@@ -15,6 +15,12 @@ uniform vec2      mouse;
 uniform vec2      ripple;
 uniform float     fadeTime;
 
+uniform vec2 l0;
+uniform vec2 l1;
+uniform vec2 l2;
+uniform vec2 l3;
+uniform vec2 l4;
+
 float col(vec2 p) {
     float tim = time * .25+23.0;
     vec2 i = vec2(p);
@@ -55,8 +61,22 @@ float rippleHeight(vec2 r, vec2 p) {
     float d = distance(r,p);
     float ra = 0.5 * (1.-fadeTime);
     if (d > ra) return 0.;
+
     float s = sin(d*200. -time*4.) * .5 + .5;
     return mix(s,0.0, distance(r,p)/ra) * fadeTime;
+}
+
+float shadow() {
+    vec2 p = gl_FragCoord.xy;
+    p.y = resolution.y - p.y;
+    p -= vec2(20,15);
+    float d = distance(p,l0);
+    d = min(d,distance(p,l1));
+    d = min(d,distance(p,l2));
+    d = min(d,distance(p,l3));
+    d = min(d,distance(p,l4));
+
+    return min(10./d,0.25);
 }
 
 
@@ -100,5 +120,6 @@ void main()
 
 
     gl_FragColor = color + vec4(vec3(height) + vec3(0,0,0.3), 0.) * alpha;
+    gl_FragColor -= vec4(shadow());
     gl_FragColor.a = 1.;
 }

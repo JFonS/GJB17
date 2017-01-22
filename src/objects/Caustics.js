@@ -12,6 +12,11 @@ class Caustics extends Phaser.Sprite {
         let uniforms = {};
         uniforms.ripple = { type: '2f', value: 1.0 };
         uniforms.fadeTime = {type: '1f', value: 0.5};
+        uniforms.l0 = {type: '2f', value: 1.0 };
+        uniforms.l1 = {type: '2f', value: 1.0 };
+        uniforms.l2 = {type: '2f', value: 1.0 };
+        uniforms.l3 = {type: '2f', value: 1.0 };
+        uniforms.l4 = {type: '2f', value: 1.0 };
 
         let filter = new Phaser.Filter(this.game, uniforms, this.game.cache.getShader('caustics'));
         filter.setResolution(this.game.width, this.game.height);
@@ -27,6 +32,15 @@ class Caustics extends Phaser.Sprite {
         let f = this.filters[0];
         f.uniforms.ripple.value = data.ripplePos;
         f.uniforms.fadeTime.value = data.fadeTime;
+    }
+
+    setPads(pads) {
+        let f = this.filters[0];
+        f.uniforms.l0.value = pads[0];
+        f.uniforms.l1.value = pads[1];
+        f.uniforms.l2.value = pads[2];
+        f.uniforms.l3.value = pads[3];
+        f.uniforms.l4.value = pads[4];
     }
 }
 

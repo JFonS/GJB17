@@ -34,6 +34,7 @@ class LillyPad extends Phaser.Sprite {
         this.body.collideWorldBounds = true;
         this.body.bounce.set(0.2);
         this.body.gravity.y = 20;
+        this.r = data.r;
         this.GRAVITY = 30;
     }
 

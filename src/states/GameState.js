@@ -88,6 +88,12 @@ class GameState extends Phaser.State {
     }
 
     preRender() {
+        let pads = []
+        for (let p of this.pads) {
+            pads.push(Phaser.Point.add(p.body.offset,p.position).add(p.r,p.r));
+        }
+        console.log(pads);
+        this.caustics.setPads(pads);
         this.fishGroup.visible = true;
         this.causticsRT.renderXY(this.fishGroup,0,0);
         this.fishGroup.visible = false;
